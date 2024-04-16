@@ -107,7 +107,7 @@ const Dashboard = () => {
 
     const handleLogOut = () => {
         localStorage.removeItem("UserId");
-        window.location.href = "https://www.exptradezglobs.com/";
+        window.location.href = "https://exptradezglobs.vercel.app/";
     };
     const handleAdmin = () => {
         window.location.href = "https://www.whitebitcrypfield.org/#/admin";
