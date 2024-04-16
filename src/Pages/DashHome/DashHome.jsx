@@ -78,7 +78,7 @@ const DashHome = ({
         <>
             <div className="DashHomeBody">
                 <h2 className="DashHomeHeaderText">
-                    Welcome, <span>{userData?.userName}</span>
+                    Welcome, <span>{userData?.fullName}</span>
                 </h2>
                 <div className="DashHomeInfoBox1">
                     <p>Welcome to Exptradezglobs, You set the level.</p>
