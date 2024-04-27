@@ -4,20 +4,24 @@ import "./TradingPlans.css";
 import {IoWalletOutline} from "react-icons/io5";
 import {useEffect, useState} from "react";
 import {useSelector} from "react-redux";
-import {addPlans} from "../../Components/store/FeaturesSlice";
+// import {addPlans} from "../../Components/store/FeaturesSlice";
 import {useDispatch} from "react-redux";
+import axios from "axios";
+import { useParams } from "react-router";
 
 const TradingPlans = () => {
+    const {id} = useParams()
+    const userId = id
     const [showSelect, setShowSelect] = useState(false);
     const [selectedPackage, setSelectedPackage] = useState(null);
-    console.log("namebe", selectedPackage);
+    console.log("namebe", userId);
     const [planPrice, setPlanPrice] = useState(0);
     // const [boxPrice, setBoxPrice] = useState(0);
     const dispatch = useDispatch();
 
     const userData = useSelector((state) => state.persisitedReducer.user);
     // const allPlans = useSelector((state) => state.persisitedReducer.plans);
-    console.log("mal", userData);
+    console.log("mal", selectedPackage?._id);
 
     const handleShowSelect = () => {
         setShowSelect(!showSelect);
@@ -26,91 +30,108 @@ const TradingPlans = () => {
     const [disabledBtn, setDisabledBtn] = useState(true);
     const [info, setInfo] = useState("");
     const [error, setError] = useState(false);
-    const calculateEndDate = (startDate, duration) => {
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + duration);
-        return endDate;
+
+    // const calculateEndDate = (startDate, duration) => {
+    //     const endDate = new Date(startDate);
+    //     endDate.setDate(endDate.getDate() + duration);
+    //     return endDate;
+    // };
+
+    // const formatDate = (date) => {
+    //     const options = {
+    //         weekday: "short",
+    //         month: "short",
+    //         day: "numeric",
+    //         year: "numeric",
+    //         hour: "numeric",
+    //         minute: "numeric",
+    //         hour12: true,
+    //     };
+    //     return new Date(date).toLocaleString("en-US", options);
+    // };
+
+    // const packageDatas = [
+    //     {
+    //         name: "Starter plan",
+    //         duration: 7,
+    //         price: "9,999",
+    //         minimumDeposit: "3,000",
+    //         maximunDeposit: "9,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "STARTER" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         selected: true,
+    //         currentInvAmt: planPrice,
+    //         startDate: formatDate(new Date()), // Start date is set to current date
+    //         endDate: formatDate(calculateEndDate(new Date(), 7)), // Calculate end date dynamically
+    //     },
+    //     {
+    //         name: "Silver Plan",
+    //         duration: 14,
+    //         price: "29,999",
+    //         minimumDeposit: "10,000",
+    //         maximunDeposit: "29,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "SILVER" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()), // Start date is set to current date
+    //         endDate: formatDate(calculateEndDate(new Date(), 14)), // Calculate end date dynamically
+    //     },
+    //     {
+    //         name: "Gold Plan",
+    //         duration: 28,
+    //         price: "1,000,000",
+    //         minimumDeposit: "30,000",
+    //         maximunDeposit: "99,999",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "GOLD" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()),
+    //         endDate: formatDate(calculateEndDate(new Date(), 28)),
+    //     },
+    //     {
+    //         name: "Platinum Plan",
+    //         duration: 168,
+    //         price: "99,999",
+    //         minimumDeposit: "100,000",
+    //         maximunDeposit: "1,000,000",
+    //         minimumReturn: "325",
+    //         maximumReturn: "325",
+    //         packageId:
+    //             "PLATINUM" + Math.floor(1000000000 + Math.random() * 9000000000),
+    //         profit: 0,
+    //         currentInvAmt: planPrice,
+    //         selected: true,
+    //         startDate: formatDate(new Date()),
+    //         endDate: formatDate(calculateEndDate(new Date(), 168)),
+    //     },
+    // ];
+    const [userPlane, setUserPlane] = useState([]);
+    const getallPlan = () => {
+        const url = "https://exptradezglobs-backend.vercel.app/api/getallplan";
+        axios.get(url)
+            .then((response) => {
+                console.log(response.data.data);
+                setUserPlane(response.data.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
-    const formatDate = (date) => {
-        const options = {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-        };
-        return new Date(date).toLocaleString("en-US", options);
-    };
-
-    const packageDatas = [
-        {
-            name: "Starter plan",
-            duration: 7,
-            price: "9,999",
-            minimumDeposit: "3,000",
-            maximunDeposit: "9,999",
-            minimumReturn: "325",
-            maximumReturn: "325",
-            packageId:
-                "STARTER" + Math.floor(1000000000 + Math.random() * 9000000000),
-            profit: 0,
-            selected: true,
-            currentInvAmt: planPrice,
-            startDate: formatDate(new Date()), // Start date is set to current date
-            endDate: formatDate(calculateEndDate(new Date(), 7)), // Calculate end date dynamically
-        },
-        {
-            name: "Silver Plan",
-            duration: 14,
-            price: "29,999",
-            minimumDeposit: "10,000",
-            maximunDeposit: "29,999",
-            minimumReturn: "325",
-            maximumReturn: "325",
-            packageId:
-                "SILVER" + Math.floor(1000000000 + Math.random() * 9000000000),
-            profit: 0,
-            currentInvAmt: planPrice,
-            selected: true,
-            startDate: formatDate(new Date()), // Start date is set to current date
-            endDate: formatDate(calculateEndDate(new Date(), 14)), // Calculate end date dynamically
-        },
-        {
-            name: "Gold Plan",
-            duration: 28,
-            price: "1,000,000",
-            minimumDeposit: "30,000",
-            maximunDeposit: "99,999",
-            minimumReturn: "325",
-            maximumReturn: "325",
-            packageId:
-                "GOLD" + Math.floor(1000000000 + Math.random() * 9000000000),
-            profit: 0,
-            currentInvAmt: planPrice,
-            selected: true,
-            startDate: formatDate(new Date()),
-            endDate: formatDate(calculateEndDate(new Date(), 28)),
-        },
-        {
-            name: "Platinum Plan",
-            duration: 168,
-            price: "99,999",
-            minimumDeposit: "100,000",
-            maximunDeposit: "1,000,000",
-            minimumReturn: "325",
-            maximumReturn: "325",
-            packageId:
-                "PLATINUM" + Math.floor(1000000000 + Math.random() * 9000000000),
-            profit: 0,
-            currentInvAmt: planPrice,
-            selected: true,
-            startDate: formatDate(new Date()),
-            endDate: formatDate(calculateEndDate(new Date(), 168)),
-        },
-    ];
+    useEffect(() => {
+        getallPlan();
+    }, []);
 
     const validateSubmit = () => {
         if (planPrice > parseInt(userData.accountBalance)) {
@@ -128,33 +149,49 @@ const TradingPlans = () => {
         validateSubmit();
     }, []);
 
-    const checkAmount = () => {
-        if (!planPrice) {
-            alert("Please input a deposit amount");
-        } else if (!selectedPackage) {
-            alert("Please select a package");
-        } else if (planPrice > parseInt(userData.accountBalance)) {
-            alert("Insufficent funds");
-        } else {
-            const planPriceNumber = parseFloat(planPrice.replace(/,/g, ""));
-            const minDepositNumber = parseFloat(
-                selectedPackage.minimumDeposit.replace(/,/g, "")
-            );
+    const data  = {
+        planId: selectedPackage?._id,
+        amount: planPrice
+    }
 
-            if (isNaN(planPriceNumber) || isNaN(minDepositNumber)) {
-                alert("Invalid plan price or minimum deposit");
-            } else if (planPriceNumber < minDepositNumber) {
-                alert(
-                    `${selectedPackage.name} minimum deposit should be at least $${minDepositNumber}`
-                );
-            } else {
-                dispatch(addPlans(selectedPackage));
-                console.log("Making Plan...");
-                alert("Success.....");
-                // window.location.reload();
-            }
-        }
+    const checkAmount = () => {
+        console.log(data)
+        const url = `https://exptradezglobs-backend.vercel.app/api/invest/${userId}`;
+        axios.post(url, data)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
+    // const checkAmount = () => {
+    //     if (!planPrice) {
+    //         alert("Please input a deposit amount");
+    //     } else if (!selectedPackage) {
+    //         alert("Please select a package");
+    //     } else if (planPrice > parseInt(userData.accountBalance)) {
+    //         alert("Insufficent funds");
+    //     } else {
+    //         const planPriceNumber = parseFloat(planPrice.replace(/,/g, ""));
+    //         const minDepositNumber = parseFloat(
+    //             selectedPackage.minimumDeposit.replace(/,/g, "")
+    //         );
+
+    //         if (isNaN(planPriceNumber) || isNaN(minDepositNumber)) {
+    //             alert("Invalid plan price or minimum deposit");
+    //         } else if (planPriceNumber < minDepositNumber) {
+    //             alert(
+    //                 `${selectedPackage.planName} minimum deposit should be at least $${minDepositNumber}`
+    //             );
+    //         } else {
+    //             dispatch(addPlans(selectedPackage));
+    //             console.log("Making Plan...");
+    //             alert("Success.....");
+    //             // window.location.reload();
+    //         }
+    //     }
+    // };
 
     const updatePlanPrice = (value) => {
         setPlanPrice(value);
@@ -180,7 +217,7 @@ const TradingPlans = () => {
                                         <FaHandHoldingDollar />
                                     </span>
                                     {selectedPackage !== null
-                                        ? `${selectedPackage.name}`
+                                        ? `${selectedPackage.planName}`
                                         : "SELECT PACKAGE"}
                                 </h3>
                                 <p
@@ -196,7 +233,7 @@ const TradingPlans = () => {
                                     showSelect ? "active" : ""
                                 }`}
                             >
-                                {packageDatas?.map((item, index) => (
+                                {userPlane?.map((item, index) => (
                                     <div
                                         key={index}
                                         className="TradingPlansLeftBoxADropItem"
@@ -209,7 +246,7 @@ const TradingPlans = () => {
                                             <span>
                                                 <FaHandHoldingDollar />
                                             </span>
-                                            {item.name}
+                                            {item.planName}
                                         </h3>
                                     </div>
                                 ))}
@@ -253,11 +290,11 @@ const TradingPlans = () => {
                                     <div className="TradingPlansRightBoxRow1">
                                         <div className="TradingPlansRightBoxRow1L">
                                             <h5>Name of plan</h5>
-                                            <p>{selectedPackage.name}</p>
+                                            <p>{selectedPackage.planName}</p>
                                         </div>
                                         <div className="TradingPlansRightBoxRow1R">
                                             <h5>Plan Price</h5>
-                                            <p>{selectedPackage.price}</p>
+                                            <p>$ {selectedPackage.maximumDeposit}</p>
                                         </div>
                                     </div>
                                     {/* <div className="TradingPlansRightBoxRow1">
@@ -282,32 +319,32 @@ const TradingPlans = () => {
                                             <h5>Maximum Deposit</h5>
                                             <p>
                                                 $
-                                                {selectedPackage.maximunDeposit}
+                                                {selectedPackage.maximumDeposit}
                                             </p>
                                         </div>
                                     </div>
                                     <div className="TradingPlansRightBoxRow1">
                                         <div className="TradingPlansRightBoxRow1L">
-                                            <h5>Minimum Return</h5>
+                                            <h5>Interest</h5>
                                             <p>
-                                                {selectedPackage.minimumReturn}%
+                                                {selectedPackage.percentageInterest}%
                                             </p>
                                         </div>
-                                        <div className="TradingPlansRightBoxRow1R">
-                                            <h5>Maximum Return</h5>
-                                            <p>
-                                                {selectedPackage.maximumReturn}%
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div className="TradingPlansRightBoxRow2">
                                         <div className="TradingPlansRightBoxRow1L">
                                             <h5>Duration</h5>
                                             <p>
-                                                {selectedPackage.duration} Days
+                                                {selectedPackage.durationDays} Days
                                             </p>
                                         </div>
                                     </div>
+                                    {/* <div className="TradingPlansRightBoxRow2">
+                                        <div className="TradingPlansRightBoxRow1L">
+                                            <h5>Duration</h5>
+                                            <p>
+                                                {selectedPackage.durationDays} Days
+                                            </p>
+                                        </div>
+                                    </div> */}
                                 </>
                             )}
                         </div>

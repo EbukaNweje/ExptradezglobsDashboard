@@ -18,7 +18,7 @@ const Payment = () => {
 
 
     const nav = useNavigate()
-    console.log(amount);
+    console.log(paymentname);
 
     const depositDatas = 
         {
@@ -30,24 +30,37 @@ const Payment = () => {
     const dispatch = useDispatch()
 
     const [state, setState] = useState({
-        value: `${paymentname === "BITCOINP PAYMENT"? ("bc1qfs0rll50zzw5aj0rt5538mq7qwsw0tv04npcpn"): paymentname === "ETHEREUM PAYMENT"? ("0x6Da1786de7532dD3a744DC852AfE04c9c98FC050"):"Chosse a Payment Method"}`,
+        value: `${paymentname === "BTC"? ("bc1qfs0rll50zzw5aj0rt5538mq7qwsw0tv04npcpn"): paymentname === "ETH"? ("0x6Da1786de7532dD3a744DC852AfE04c9c98FC050"):"Chosse a Payment Method"}`,
         copied: false,
       });
 
       const url = `https://exptradezglobsbackend.onrender.com/api/sendpayment/${id}`
+      const url2 = `https://exptradezglobs-backend.vercel.app/api/deposit/${id}`
 
       const data = {
-        amountDeposited:amount,
-        paymentMethod: paymentname
+        amount:amount
+      }
+      const data2 = {
+        amount: amount,
+        coin: paymentname
       }
       
+      const SendPayMenttoadmin = ()=> {
+        axios.post(url2, data2)
+        .then(res => {
+          console.log(res)
+        //   setpay(true)
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
       const payNow = ()=> {
         setButtonDisabled(true)
         axios.post(url, data)
         .then(res => {
+            SendPayMenttoadmin()
           console.log(res)
           setpay(true)
-
         }).catch((err)=>{
           console.log(err)
         })

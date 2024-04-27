@@ -38,12 +38,14 @@ const DashHome = ({
     const bitcoinValue4 = userData?.ref / exchangeRate;
     const bitcoinValue5 = userData?.totalDeposit / exchangeRate;
     const bitcoinValue6 = userData?.totalWithdrawal / exchangeRate;
+    const bitcoinValue7 = userData?.totalInvestment / exchangeRate;
     const roundedNumber = parseFloat(bitcoinValue.toFixed(8));
     const roundedNumber2 = parseFloat(bitcoinValue2.toFixed(8));
     const roundedNumber3 = parseFloat(bitcoinValue3.toFixed(8));
     const roundedNumber4 = parseFloat(bitcoinValue4.toFixed(8));
     const roundedNumber5 = parseFloat(bitcoinValue5.toFixed(8));
     const roundedNumber6 = parseFloat(bitcoinValue6.toFixed(8));
+    const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
     console.log("this is it", roundedNumber);
 
     const allPlans = useSelector((state) => state.persisitedReducer.plans);
@@ -56,23 +58,23 @@ const DashHome = ({
         handleShowDetailPlan();
     };
 
-    const calculateTotalInvestment = (array) => {
-        if (array.length === 0) {
-            return 0;
-        }
+    // const calculateTotalInvestment = (array) => {
+    //     if (array.length === 0) {
+    //         return 0;
+    //     }
 
-        const total = array.reduce((accumulator, currentValue) => {
-            const currentValueNumber = parseFloat(currentValue.currentInvAmt);
-            return accumulator + currentValueNumber;
-        }, 0);
+    //     const total = array.reduce((accumulator, currentValue) => {
+    //         const currentValueNumber = parseFloat(currentValue.currentInvAmt);
+    //         return accumulator + currentValueNumber;
+    //     }, 0);
 
-        return total;
-    };
+    //     return total;
+    // };
 
-    const totalInvestment = calculateTotalInvestment(allPlans);
-    console.log("Total Investment:", totalInvestment);
-    const bitcoinValue7 = totalInvestment / exchangeRate;
-    const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
+    // const totalInvestment = calculateTotalInvestment(allPlans);
+    // console.log("Total Investment:", totalInvestment);
+    // const bitcoinValue7 = totalInvestment / exchangeRate;
+    // const roundedNumber7 = parseFloat(bitcoinValue7.toFixed(8));
 
     return (
         <>
@@ -181,7 +183,7 @@ const DashHome = ({
                                     <div className="DashHomeMainContentAccSummaryRow2BoxL">
                                         <h4>Total Investment</h4>
                                         <h3>
-                                            $ &nbsp;{totalInvestment}
+                                            $ {userData?.totalInvestment}
                                             .00
                                         </h3>
                                         <span style={{fontWeight: "700"}}>
